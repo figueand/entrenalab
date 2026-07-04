@@ -1,0 +1,14 @@
+{
+  "name": "entrenalab",
+  "version": "1.0.0",
+  "description": "Calculadora de entrenamiento y generador de rutinas basado en evidencia científica.",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.4"
+  },
+  "license": "MIT"
+}

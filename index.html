@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EntrenaLab — Calculadora de entrenamiento</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="wordmark">EntrenaLab</div>
+  <div class="tagline">Cálculos de entrenamiento basados en evidencia · 100% en tu navegador</div>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button class="tab-btn" data-target="view-1rm" role="tab" aria-selected="true">1RM</button>
+  <button class="tab-btn" data-target="view-strength" role="tab" aria-selected="false">DOTS / Wilks</button>
+  <button class="tab-btn" data-target="view-tdee" role="tab" aria-selected="false">TDEE y macros</button>
+  <button class="tab-btn" data-target="view-hr" role="tab" aria-selected="false">FC y zonas</button>
+  <button class="tab-btn" data-target="view-referencias" role="tab" aria-selected="false">Referencias</button>
+</nav>
+
+<main>
+
+  <!-- ============ 1RM ============ -->
+  <section class="view" id="view-1rm">
+    <div class="view-header">
+      <div class="eyebrow">Módulo 01</div>
+      <h1>Una repetición máxima (1RM)</h1>
+      <p>Estimá tu 1RM a partir de un peso submáximo y las repeticiones realizadas hasta el fallo técnico, usando 5 fórmulas de referencia.</p>
+    </div>
+
+    <form id="form-1rm" class="panel">
+      <h2>Datos del set</h2>
+      <div class="field-grid">
+        <div>
+          <label for="1rm-weight">Peso levantado (kg)</label>
+          <input type="number" id="1rm-weight" step="0.5" min="1" value="100" required>
+        </div>
+        <div>
+          <label for="1rm-reps">Repeticiones realizadas</label>
+          <input type="number" id="1rm-reps" step="1" min="1" max="20" value="8" required>
+          <div class="field-help">Válido hasta ~10-12 reps. Por encima, la estimación pierde precisión.</div>
+        </div>
+      </div>
+      <button type="submit" class="primary">Calcular 1RM</button>
+    </form>
+
+    <div id="result-1rm" class="readout"></div>
+
+    <div class="panel" style="margin-top:1.25rem;">
+      <h2>Tabla de cargas por % 1RM</h2>
+      <div id="table-1rm"><p class="field-help">Calculá tu 1RM para ver la tabla de cargas de trabajo.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DOTS / WILKS ============ -->
+  <section class="view" id="view-strength">
+    <div class="view-header">
+      <div class="eyebrow">Módulo 02</div>
+      <h1>DOTS / Wilks — fuerza relativa</h1>
+      <p>Compará tu nivel de fuerza en powerlifting independientemente de tu peso corporal.</p>
+    </div>
+
+    <form id="form-strength" class="panel">
+      <h2>Total y peso corporal</h2>
+      <div class="field-grid">
+        <div>
+          <label for="strength-bw">Peso corporal (kg)</label>
+          <input type="number" id="strength-bw" step="0.1" min="1" value="80" required>
+        </div>
+        <div>
+          <label for="strength-total">Total levantado (kg)</label>
+          <input type="number" id="strength-total" step="0.5" min="1" value="500" required>
+          <div class="field-help">Suma de sentadilla + press banca + peso muerto, o un solo levantamiento.</div>
+        </div>
+      </div>
+      <label style="margin-top:0.9rem;">Sexo biológico</label>
+      <div class="radio-group">
+        <label><input type="radio" name="strength-sex" value="male" checked> Masculino</label>
+        <label><input type="radio" name="strength-sex" value="female"> Femenino</label>
+      </div>
+      <button type="submit" class="primary">Calcular puntuación</button>
+    </form>
+
+    <div id="result-strength" class="readout"></div>
+  </section>
+
+  <!-- ============ TDEE / MACROS ============ -->
+  <section class="view" id="view-tdee">
+    <div class="view-header">
+      <div class="eyebrow">Módulo 03</div>
+      <h1>TDEE y reparto de macros</h1>
+      <p>Calculá tu gasto energético total diario y un reparto de macronutrientes según tu objetivo.</p>
+    </div>
+
+    <form id="form-tdee" class="panel">
+      <h2>Datos personales</h2>
+      <div class="field-grid">
+        <div>
+          <label for="tdee-weight">Peso (kg)</label>
+          <input type="number" id="tdee-weight" step="0.1" min="1" value="75" required>
+        </div>
+        <div>
+          <label for="tdee-height">Altura (cm)</label>
+          <input type="number" id="tdee-height" step="1" min="1" value="175" required>
+        </div>
+        <div>
+          <label for="tdee-age">Edad (años)</label>
+          <input type="number" id="tdee-age" step="1" min="1" value="30" required>
+        </div>
+        <div>
+          <label for="tdee-activity">Nivel de actividad</label>
+          <select id="tdee-activity"></select>
+        </div>
+      </div>
+
+      <label style="margin-top:0.9rem;">Sexo biológico</label>
+      <div class="radio-group">
+        <label><input type="radio" name="tdee-sex" value="male" checked> Masculino</label>
+        <label><input type="radio" name="tdee-sex" value="female"> Femenino</label>
+      </div>
+
+      <label style="margin-top:0.9rem;">Objetivo</label>
+      <div class="radio-group">
+        <label><input type="radio" name="tdee-goal" value="loss"> Pérdida de grasa</label>
+        <label><input type="radio" name="tdee-goal" value="maintenance" checked> Mantenimiento</label>
+        <label><input type="radio" name="tdee-goal" value="gain"> Ganancia muscular</label>
+      </div>
+
+      <button type="submit" class="primary">Calcular TDEE</button>
+    </form>
+
+    <div id="result-tdee" class="readout"></div>
+  </section>
+
+  <!-- ============ FC Y ZONAS ============ -->
+  <section class="view" id="view-hr">
+    <div class="view-header">
+      <div class="eyebrow">Módulo 04</div>
+      <h1>Frecuencia cardíaca y zonas</h1>
+      <p>Calculá tu FCmáx estimada y las 5 zonas de entrenamiento por el método de Karvonen.</p>
+    </div>
+
+    <form id="form-hr" class="panel">
+      <h2>Datos personales</h2>
+      <div class="field-grid">
+        <div>
+          <label for="hr-age">Edad (años)</label>
+          <input type="number" id="hr-age" step="1" min="1" value="30" required>
+        </div>
+        <div>
+          <label for="hr-resting">FC en reposo (lpm)</label>
+          <input type="number" id="hr-resting" step="1" min="1" value="65" required>
+        </div>
+      </div>
+      <label style="margin-top:0.9rem;">Método de FCmáx</label>
+      <div class="radio-group">
+        <label><input type="radio" name="hr-method" value="tanaka" checked> Tanaka (recomendado)</label>
+        <label><input type="radio" name="hr-method" value="classic"> Clásica (220-edad)</label>
+      </div>
+      <button type="submit" class="primary">Calcular zonas</button>
+    </form>
+
+    <div id="result-hr" class="readout"></div>
+  </section>
+
+  <!-- ============ REFERENCIAS ============ -->
+  <section class="view" id="view-referencias">
+    <div class="view-header">
+      <div class="eyebrow">Bibliografía</div>
+      <h1>Referencias</h1>
+      <p>Cada fórmula usada en EntrenaLab, con autor, año, publicación original y su alcance.</p>
+    </div>
+    <!-- Renderizado por js/ui/references.js -->
+  </section>
+
+  <div class="disclaimer">
+    ⚠ EntrenaLab es una herramienta educativa e informativa. Las ecuaciones de predicción tienen márgenes de error inherentes y no reemplazan una evaluación médica ni el criterio de un profesional certificado en ciencias del deporte.
+  </div>
+
+</main>
+
+<footer class="app-footer">EntrenaLab · MIT License · Sin backend, sin costo de API</footer>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+/* =========================================================================
+   EntrenaLab — Sistema de diseño
+   Dirección: cuaderno de laboratorio de rendimiento. Papel milimetrado,
+   tipografía de datos (mono) para números, verde "readout" de instrumento
+   para resaltar resultados medidos. Cada resultado se presenta como una
+   lectura de instrumento con su escala, no como una tarjeta genérica.
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --ink: #171b1a;
+  --ink-soft: #4a5350;
+  --paper: #eef1ea;
+  --paper-raised: #f7f9f3;
+  --line: #c7cdbd;
+  --line-strong: #9aa393;
+  --accent: #2f5d4e;
+  --accent-strong: #1d4536;
+  --readout: #3fae7f;
+  --readout-bg: #12241d;
+  --warn: #b5502f;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --radius: 3px;
+  --grid-size: 28px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    var(--paper);
+  background-blend-mode: normal;
+  color: var(--ink);
+  font-family: var(--font-display);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ---------- Header ---------- */
+
+.app-header {
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper-raised);
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.app-header .wordmark {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.app-header .wordmark::before {
+  content: '§';
+  color: var(--readout);
+  font-family: var(--font-mono);
+}
+
+.app-header .tagline {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- Nav (pestañas tipo carpeta de laboratorio) ---------- */
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+  padding: 0 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tab-btn {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--line);
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  color: var(--ink-soft);
+  position: relative;
+  top: 1px;
+}
+
+.tab-btn:hover { color: var(--ink); background: var(--paper-raised); }
+
+.tab-btn[aria-selected="true"] {
+  color: var(--ink);
+  background: var(--paper-raised);
+  border-bottom: 2px solid var(--paper-raised);
+  font-weight: 600;
+}
+
+.tab-btn[aria-selected="true"]::before {
+  content: '▸';
+  color: var(--readout);
+  margin-right: 0.4em;
+}
+
+.tab-btn:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+/* ---------- Layout general ---------- */
+
+main { max-width: 900px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+.view { display: none; }
+.view.active { display: block; animation: fade-in 0.15s ease-out; }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.view-header { margin-bottom: 1.5rem; }
+
+.view-header .eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.view-header h1 { margin: 0.2rem 0 0.3rem; font-size: 1.7rem; }
+.view-header p { margin: 0; color: var(--ink-soft); max-width: 60ch; }
+
+/* ---------- Panel / formulario ---------- */
+
+.panel {
+  background: var(--paper-raised);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.panel h2 {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px dashed var(--line-strong);
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.9rem;
+}
+
+label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  margin-bottom: 0.35rem;
+}
+
+input, select {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  padding: 0.55rem 0.6rem;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+}
+
+input:focus, select:focus { border-color: var(--accent-strong); }
+
+.field-help { font-size: 0.72rem; color: var(--ink-soft); margin-top: 0.25rem; }
+
+.radio-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+.radio-group label {
+  display: flex; align-items: center; gap: 0.4rem;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  text-transform: none;
+  font-size: 0.85rem;
+  color: var(--ink);
+  margin: 0;
+}
+
+.radio-group input { width: auto; }
+.radio-group label:has(input:checked) {
+  border-color: var(--accent-strong);
+  background: rgba(47, 93, 78, 0.08);
+}
+
+button.primary {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.82rem;
+  background: var(--accent-strong);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+button.primary:hover { background: var(--ink); }
+
+button.ghost {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: transparent;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+  color: var(--ink-soft);
+}
+
+button.ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ---------- Readout (resultado tipo instrumento) ---------- */
+
+.readout {
+  background: var(--readout-bg);
+  color: var(--readout);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.4rem;
+  font-family: var(--font-mono);
+  display: none;
+}
+
+.readout.visible { display: block; }
+
+.readout .readout-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+.readout .readout-value {
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0.2rem 0 0.6rem;
+}
+
+.readout .readout-value .unit { font-size: 1.1rem; opacity: 0.8; margin-left: 0.3rem; }
+
+.readout-scale {
+  display: flex;
+  border-top: 1px solid rgba(63, 174, 127, 0.3);
+  padding-top: 0.7rem;
+  gap: 1px;
+}
+
+.readout-scale .tick {
+  flex: 1;
+  text-align: center;
+  font-size: 0.68rem;
+  opacity: 0.6;
+  border-left: 1px solid rgba(63, 174, 127, 0.25);
+  padding: 0.2rem 0.1rem 0;
+}
+
+/* ---------- Tabla de datos ---------- */
+
+table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+.data-table th, .data-table td {
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+}
+
+.data-table th {
+  background: var(--paper);
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+.data-table tr:nth-child(even) td { background: rgba(0,0,0,0.015); }
+
+/* ---------- Tarjeta de formula-tag (citación) ---------- */
+
+.formula-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--accent-strong);
+  background: rgba(47, 93, 78, 0.08);
+  border: 1px solid rgba(47, 93, 78, 0.3);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  margin: 0.15rem 0.3rem 0.15rem 0;
+}
+
+.formula-tag::before { content: '✓'; color: var(--readout); }
+
+/* ---------- Utilidades ---------- */
+
+.stack { display: flex; flex-direction: column; gap: 1.25rem; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+@media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+.disclaimer {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  border-left: 3px solid var(--warn);
+  padding: 0.6rem 0.9rem;
+  background: rgba(181, 80, 47, 0.06);
+  margin-top: 2rem;
+}
+
+footer.app-footer {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  padding: 2rem 1rem 3rem;
+}
